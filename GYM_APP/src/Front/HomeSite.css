@@ -1,0 +1,105 @@
+
+/* Ajusta el alto del carrusel */
+.custom-carousel {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Hace que la imagen se escale sin deformarse */
+.carousel-img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.logo {
+  
+  
+  align-items: center;
+  gap: 1.5rem; /* espacio entre imagen y texto */
+  padding-top: 0.5rem;
+}
+
+.logo-img {
+  
+  width: 80px;  /* ajusta el tamaño */
+  height: 80px;
+  border-radius: 50%; /* ✅ Si quieres que se vea circular */
+  object-fit: cover;
+}
+
+
+
+/* ============================= */
+/* SECCIONES */
+/* ============================= */
+section {
+  scroll-margin-top: 100px;
+  padding: 10rem 1rem;
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 100%;
+  background: #ffffffcc; /* blanco con ligera transparencia */
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+section h2 {
+  font-size: 2.2rem;
+  color: #222;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+section h2::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background-color: #222;
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+section p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 1rem;
+}
+
+section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+section ul li {
+  padding: 0.5rem 0;
+  color: #444;
+  font-size: 1rem;
+}
+
+/* En móviles, reduce el alto si es necesario */
+@media (max-width: 576px) {
+  .custom-carousel {
+    max-height: 300px;
+  }
+
+  .carousel-img {
+    max-height: 300px;
+  }
+}
