@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CircularIndeterminate  from "../Componente/BarraProgreso"
 import "./HomeSite.css";
+
+
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const scrollToTop = () =>
@@ -12,6 +16,13 @@ export default function Home() {
       top: 0,
       behavior: "smooth",
     });
+
+  useEffect(() => {
+    console.log("✅ Página Home montada");
+    setOpen(true); // Abre el modal automáticamente al entrar
+    return () => console.log("❌ Página Home desmontada");
+  }, []);
+
 
   return (
     <>
@@ -40,9 +51,12 @@ export default function Home() {
                 </li>
               ))}
               <li className="nav-item">
-                <button className="btn btn-outline-primary" onClick={() => navigate("/login")}>
+                <button className="btn btn-outline-primary" onClick={() => { setOpen(true); navigate("/login") }} >
                   Login
                 </button>
+                
+
+
               </li>
             </ul>
           </div>
