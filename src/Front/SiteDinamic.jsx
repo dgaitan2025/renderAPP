@@ -1,23 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import "./SiteDinamic.css";
 
 export default function SiteDinamic() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const routes = [
-    { path: "/sitedinamic/EnConstruccion", label: "Dashboard" },
-    { path: "/sitedinamic/VistaUsuarios", label: "Registrar Usuarios" },
-    { path: "/sitedinamic/EnConstruccion", label: "Registrar Empleados" },
-    { path: "/sitedinamic/EnConstruccion", label: "Renovar Membresía" },
-    { path: "/sitedinamic/EnConstruccion", label: "Reportes" },
-    { path: "/sitedinamic/EnConstruccion", label: "Usuarios" },
-    { path: "/sitedinamic/EnConstruccion", label: "Settings" },
+    { path: "/sitedinamic/EnConstruccion", label: "Dashboard", roles: [1,2,3,4] },
+    { path: "/sitedinamic/EnConstruccion", label: "Membresia", roles: [4] },
+    { path: "/sitedinamic/EnConstruccion", label: "Rutinas", roles: [4] },
+    { path: "/sitedinamic/EnConstruccion", label: "Asistencia", roles: [4,2] },
+    { path: "/sitedinamic/EnConstruccion", label: "Registro pago", roles: [2] },
+    { path: "/sitedinamic/VistaUsuarios", label: "Registrar Usuarios", roles: [1,2] },
+    { path: "/sitedinamic/VistaEmpleados", label: "Registrar Empleados", roles: [1] },
+    { path: "/sitedinamic/EnConstruccion", label: "Renovar Membresía", roles: [1,2] },
+    { path: "/sitedinamic/EnConstruccion", label: "Reportes", roles: [1,2] },
+    { path: "/sitedinamic/EnConstruccion", label: "Asignar rutinas", roles: [3] },
+    { path: "/sitedinamic/EnConstruccion", label: "Crear Rutina", roles: [3] },
+    { path: "/sitedinamic/EnConstruccion", label: "Historial de rutinas", roles: [3] },
+    
   ];
+
+  
+useEffect(() => {
+  const raw = localStorage.getItem("tipoUser"); // p.ej. "1"
+  const r = raw !== null ? Number(raw) : null;
+
+  if (Number.isFinite(r)) {
+    setRole(r);
+  } else {
+    // No hay rol válido → vuelve al login
+    navigate("/");
+  }
+}, [navigate]);
+
+
+const visibleRoutes = useMemo(() => {
+  if (role === null) return [];
+  return routes.filter(r => r.roles.includes(role));
+}, [role, routes]);
+
 
   const handleResize = () => {
     const mobile = window.innerWidth <= 768;
@@ -32,6 +59,7 @@ export default function SiteDinamic() {
 
   const handleLogout = () => {
     localStorage.removeItem("isLogged");
+    localStorage.removeItem("tipoUser");
     navigate("/");
   };
 
@@ -40,12 +68,12 @@ export default function SiteDinamic() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const renderButtons = () =>
-    routes.map(({ path, label }) => (
-      <button key={label} onClick={() => handleNavigation(path)}>
-        {label}
-      </button>
-    ));
+const renderButtons = () =>
+  visibleRoutes.map(({ path, label }) => (
+    <button key={label} onClick={() => handleNavigation(path)}>
+      {label}
+    </button>
+  ));
 
   return (
     <div className="container-fluid">
