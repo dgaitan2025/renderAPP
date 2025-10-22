@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import GraficoPie from "../Graficas/GraficoPie";
-import VistaEnConstruccion from "../Vistas/VistaEnConstruccion";
+import GraficoBar from "../Graficas/GraficoCliente"
+import VistaInicioComun from "../Vistas/VistaInicioComun"
 import { RequireRole } from "../Funciones/PrivateRoute";
 // import Membresias from "../Graficas/Membresias";
 
@@ -10,9 +11,9 @@ export default function DashContent() {
   switch (view) {
     case "GraficoPie":
       return <RequireRole roles={[1,2]}><GraficoPie /></RequireRole>;
-    // case "Membresias":
-    //   return <Membresias />;
+    case "GrupoMuscular":
+      return <RequireRole roles={[1,4]}><GraficoBar /></RequireRole>;
     default:
-      return <VistaEnConstruccion />;
+      return <VistaInicioComun />; 
   }
 }

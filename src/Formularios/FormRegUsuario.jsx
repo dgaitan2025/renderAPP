@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Front/SiteDinamic";
 import "./FormRegUsuario.css";
-import { cuiValido, nitValido } from "../Funciones/validaDPI.js";
+import { cuiValido} from "../Funciones/validaDPI.js";
 import { insertarCliente } from "../Funciones/IntoClienteService";
 import { createPortal } from "react-dom";
 import { Procesando } from "../Componente/Espera";
-import { obtenerMembresias } from "../Funciones/Membresias.js";
+import { cargarMembresias } from "../Funciones/Membresias.js";
 
 const SOLO_LETRAS_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
@@ -22,7 +22,7 @@ const validarCorreo = (correo) => {
   const correoTrim = (correo || "").trim();
 
   if (!correoTrim) return "El correo es obligatorio";
-  
+
   if (!CORREO_REGEX.test(correoTrim)) {
     return "Formato de correo inválido";
   }
@@ -47,8 +47,9 @@ const validarEdadMinima = (fechaISO, minAnios = 13) => {
 // ------------------------------------------------
 const { showLoading, closeLoading } = Procesando();
 function Formulario({ onClose }) {
+  const {membresias} = cargarMembresias();
 
-  
+
   const initialFormData = {
     nombre: "",
     apellido: "",
@@ -65,25 +66,11 @@ function Formulario({ onClose }) {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [errors, setErrors] = useState({});
-  const [membresias, setMembresias] = useState([]);
+  
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Cargar membresías y limpiar recursos al desmontar
-
-  useEffect(() => {
-    const cargarMembresias = async () => {
-      try {
-        const data = await obtenerMembresias();
-        setMembresias(data);
-      } catch (error) {
-        alert("Error al extraer membresias");
-      }
-    };
-
-    cargarMembresias(); // se ejecuta al montar el form
-  }, []);
 
   // ------------ onChange con validaciones por campo ------------
   const handleChange = (e) => {
@@ -115,8 +102,9 @@ function Formulario({ onClose }) {
     if (name === "dpi") {
       const dpi = normalizarDPI(value);
       setFormData((p) => ({ ...p, dpi }));
-      if (!cuiValido(dpi)) newErrors.dpi = "El DPI no es válido";
-      else delete newErrors.dpi;
+      const respuesta = cuiValido(dpi)
+      if (!respuesta.valido) newErrors.dpi = { tipo: "error", mensaje: "El DPI no es válido" };
+      else newErrors.dpi = { tipo: "ok", mensaje: `Departamento: ${respuesta.departamento}, Municipio: ${respuesta.municipio}` };
       setErrors(newErrors);
       return;
     }
@@ -183,7 +171,7 @@ function Formulario({ onClose }) {
     // DPIf
     const dpi = (formData.dpi || "").trim();
     if (!dpi) newErrors.dpi = "El DPI es obligatorio";
-    
+
     else if (!cuiValido(dpi)) newErrors.dpi = "El DPI no es válido";
 
     // Fecha
@@ -199,13 +187,17 @@ function Formulario({ onClose }) {
       newErrors.membresiaId = "El ID de membresía es obligatorio";
     }
 
+    if(formData.foto64 ===""){
+      newErrors.photo = "debe de tomar fotografia"
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   // ------------ Submit ------------
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault();
     if (!validate()) return;
     onClose();
@@ -213,39 +205,39 @@ function Formulario({ onClose }) {
     try {
       const cliente = {
 
-        clientes:{
-        nombre: formData.nombre,
-        apellido: formData.apellido,
-        telefono: formData.telefono,
-        fechaNacimiento: formData.fechaNacimiento,
-        foto: formData.foto64,          // usamos la foto en Base64 si fue tomada
-        correo: formData.correo,
-        idTipoUsuario: 4,
-        idMembresia: parseInt(formData.membresiaId, 10),
-        idSucursal: 1,
-        numero_Identificacion: formData.dpi
+        clientes: {
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          telefono: formData.telefono,
+          fechaNacimiento: formData.fechaNacimiento,
+          foto: formData.foto64,          // usamos la foto en Base64 si fue tomada
+          correo: formData.correo,
+          idTipoUsuario: 4,
+          idMembresia: parseInt(formData.membresiaId, 10),
+          idSucursal: 1,
+          numero_Identificacion: formData.dpi
         },
-        usuario:{
+        usuario: {
           correo: formData.correo
         }
-        
+
       };
 
       const resultado = await insertarCliente(cliente);
       if (resultado?.success === 1) {
-        closeLoading(true,"Registrado");
+        closeLoading(true, "Registrado");
       } else {
-        closeLoading(false,resultado.mensaje);
-        
+        closeLoading(false, resultado.mensaje);
+
       }
     } catch (err) {
       console.error(err);
-      closeLoading(false,"Error, intente mas tarde.");
+      closeLoading(false, "Error, intente mas tarde.");
     } finally {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setFormData(initialFormData);
       setPreviewUrl(null);
-      
+
     }
   };
 
@@ -360,7 +352,11 @@ function Formulario({ onClose }) {
                   onChange={handleChange}
                   required
                 />
-                {errors.dpi && <p className="error">{errors.dpi}</p>}
+                {errors.dpi && (
+                  <p className={errors.dpi.tipo === "error" ? "error" : "success"}>
+                    {errors.dpi.mensaje}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -407,6 +403,7 @@ function Formulario({ onClose }) {
 
               <div>
                 <label>Foto:</label>
+                {errors.photo && <p className="error">{errors.photo}</p>}
                 <button type="button" className="boton-camara" onClick={abrirCamara}>Usar Cámara</button>
               </div>
 

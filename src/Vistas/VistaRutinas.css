@@ -147,7 +147,7 @@ tr:hover {
 /* ✅ Se agregó para el modal de ExpCliente */
 
 /* overlay que cubre toda la pantalla */
-.modal2-overlay {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -162,26 +162,23 @@ tr:hover {
   overflow-y: auto; /* evita que el body haga scroll mientras el modal está abierto */
 }
 
-/* contenedor centrado del modal */
-.modal2-content {
-min-height: 750px;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 90%;       /* ancho máximo del modal */
-  width: 1000px;
-  max-height: 90vh;     /* usa 90% de la altura de la ventana */
-  overflow-y: auto;     /* scroll vertical si el contenido es más alto */
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  scrollbar-gutter: stable;
-}
+.modal-content { min-height: 400px; 
+  background-color: #fff; 
+  padding: 2rem; 
+  border-radius: 1rem; 
+  max-width: 90%; /* ancho máximo del modal */ 
+  width: 1000px; 
+  max-height: 90vh; /* usa 90% de la altura de la ventana */ 
+  overflow-y: auto; /* scroll vertical si el contenido es más alto */
+   box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+   display: flex; 
+   flex-direction: column; 
+   position: relative; 
+   scrollbar-gutter: stable; }
 
 /* Ajuste para dispositivos pequeños */
 @media (max-width: 768px) {
-  .modal2-content {
+  .modal-content {
     width: 95%;
     max-height: 85vh; 
     padding: 1rem;
@@ -208,26 +205,6 @@ min-height: 750px;
 }
 
 
-/* VistaUsuarios.css */
-.modal3-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1100; /* puedes darle un z-index mayor que modal2 si quieres que siempre quede encima */
-}
 
-.modal3-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 1000px;
-  width: 100%;
-  position: relative;
-}
+
 
