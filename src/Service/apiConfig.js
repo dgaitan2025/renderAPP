@@ -1,6 +1,6 @@
 // DOminio
-export const URL = "http://localhost:5230"; //DG
-const API_URL = "https://localhost:7288" //"https://Compiladores2025.somee.com"; //RD
+export const URL = "https://www.apitect.somee.com"//"http://localhost:5230"; //DG
+const API_URL = "https://Compiladores2025.somee.com"//"https://localhost:7288" //"https://Compiladores2025.somee.com"; //RD
 
 
 // Endpoints organizados
@@ -39,7 +39,13 @@ export const ENDPOINTS = {
   empleadoActualizar: (id)=>`/api/Empleadoes/EmpleadosActualizar/${id}`,
   eliminarCliente: (id) =>`/api/Empleadoes/EmpleadosEliminar/${id}`,
   reporteClientes: "/api/Reportes/RptClienteIndex?base64=false",
-  asistencia:"/api/Asistenciums/AsistenciaCrear"
+  asistencia:"/api/Asistenciums/AsistenciaCrear",
+  clientesAsistencia:"/api/Asistenciums/AsistenciaDelDia",
+  clienteSalida:(id) =>`/api/Asistenciums/AsistenciaActualizar/${id}`,
+  asignarRutina: "/api/Registro_Diario/RegistroCrear",
+  dashEntrenador: "/api/DashBoard/GruposporRutinas",
+  rutinaClienteAsig:(id) => `/api/Registro_Diario/RegistroListarPorUsuario/${id}`,
+  rutinaFinalizar:(id) =>`/api/Registro_Diario/RegistroFinalizar/${id}`
 
 
 };
