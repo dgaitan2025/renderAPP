@@ -39,13 +39,20 @@ export const ENDPOINTS = {
   empleadoActualizar: (id)=>`/api/Empleadoes/EmpleadosActualizar/${id}`,
   eliminarCliente: (id) =>`/api/Empleadoes/EmpleadosEliminar/${id}`,
   reporteClientes: "/api/Reportes/RptClienteIndex?base64=false",
+  reporteAsistenciaPorCliente: "/api/Reportes/Asistencia_FechayCliente?base64=false",
+  reportePorcentajeAsistencia: "/api/Reportes/RptAsistenciaRachaDia?base64=false",
+  reporteRutinasAsistencia: "/api/Reportes/RptRutinasPorAsistencia?base64=false",
+  reporteIngresosPorCliente: "/api/Reportes/RptControlIngresosPorCliente?base64=false",
+  reporteIngresosPorFecha: "/api/Reportes/RptTotalIngresosPorFecha?base64=false", 
   asistencia:"/api/Asistenciums/AsistenciaCrear",
   clientesAsistencia:"/api/Asistenciums/AsistenciaDelDia",
   clienteSalida:(id) =>`/api/Asistenciums/AsistenciaActualizar/${id}`,
   asignarRutina: "/api/Registro_Diario/RegistroCrear",
   dashEntrenador: "/api/DashBoard/GruposporRutinas",
   rutinaClienteAsig:(id) => `/api/Registro_Diario/RegistroListarPorUsuario/${id}`,
-  rutinaFinalizar:(id) =>`/api/Registro_Diario/RegistroFinalizar/${id}`
+  rutinaFinalizar:(id) =>`/api/Registro_Diario/RegistroFinalizar/${id}`,
+  dashCliente: (id)=>`/api/DashBoard/MusculosMasTrabajadosPorCliente/${id}`,
+  dashAsistencia: "/api/DashBoard/EntradasySalidasDelDia"
 
 
 };
